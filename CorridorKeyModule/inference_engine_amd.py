@@ -3,6 +3,7 @@ inference_engine_amd.py — Universal AMD/DirectML engine for CorridorKey.
 
 Drop-in replacement for CorridorKeyEngine on AMD hardware.
 Interface is identical so backend.py / main.py need no changes.
+Note from toowyred: This is not meant to be run directly, but just in case. :3
 
 Architecture (AMD path):
   - Backbone (Hiera encoder + decoders): CPU via ORT
