@@ -47,18 +47,28 @@ This GUI replaces the CLI drag-and-drop workflow with a complete desktop applica
 - **macOS:** Apple Silicon (M1+). CorridorKey inference runs natively via MLX (1.5–2x faster than MPS). GPU-intensive alpha generators (SAM2, GVM, VideoMaMa, MatAnyone2) run on MPS but are significantly slower — importing pre-made alpha mattes is recommended on Mac.
 
 ### 🔴 AMD Radeon GPU Setup (Crucial) by toowyred for the AMD/Portability patch
-If you are using an AMD GPU (e.g., RX 7900 XTX), the standard installer defaults to CPU-only mode. To enable hardware acceleration, run these commands in your terminal (inside EZ-CorridorKey folder) after the initial install:
+If you are using an AMD GPU (e.g., RX 7900 XTX), the standard installer defaults to CPU-only mode to prevent driver crashes. To unlock Hybrid GPU Acceleration (CPU Backbone + GPU Refiner), follow these steps after the initial install:
 
-1. **Activate the environment:**
+1. **Run the AMD Installer:**
+Double-click 1-install-amd.bat. This automatically cleans up NVIDIA-specific packages and installs the optimized DirectML runtime, which includes:
    `python -m venv .venv`
    `".venv\Scripts\activate"`
+   `python -m pip install torch-directml torchvision numpy PySide6 timm transformers` and runs `export_to_onnx.py` (a custom "split-engine")
 
-3. **Install AMD-specific AI libraries:**
-   `python -m pip install torch-directml torchvision numpy PySide6 timm transformers`
-
-4. **Launch:** Use `2-start.bat` to bypass CUDA checks.
+2. **Launch:** Use `2-start.bat`.
    
-5. **Note on GPU Warnings:** Even after these steps, the "Startup Diagnostics" window may still show a "GPU Required" error. This is because the app is specifically checking for NVIDIA CUDA. As long as you have installed `torch-directml` and are using the edited `2-start.bat`, the application will use your AMD card for supported tasks or fallback to your CPU. Check the terminal window for the `[INFO] Launching with DirectML (AMD/Radeon) compatibility...` message to confirm.
+3. **Native AMD Diagnostics:** Updated the diagnostic system to recognize DirectML hardware natively. Instead of a "GPU Required" error, you will now see a clean informational checklist verifying your setup:
+
+| Before (NVIDIA-only Check) | After (DirectML Native Detection) |
+| :--- | :--- |
+| ![Before](dev-docs/guides/screenshots/GPU-warning-on-AMD-before.png) | ![After](dev-docs/guides/screenshots/GPU-warning-on-AMD-after.png) |
+
+**Note on Performance:**
+
+Split Engine: The first inference pass after launch will be slow (~20-40s) while DirectML compiles custom shaders for your card. Subsequent frames will be significantly faster.
+
+NVIDIA-Exclusive Features: GVM and VideoMaMa still require CUDA. For those specific workflows, use manual alpha hints or the "Import Alpha" feature.
+
 
 **What the installer does:**
 
