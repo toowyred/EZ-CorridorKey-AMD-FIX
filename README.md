@@ -46,6 +46,20 @@ This GUI replaces the CLI drag-and-drop workflow with a complete desktop applica
 - **Windows/Linux:** NVIDIA GPU with CUDA support (8 GB+ VRAM recommended). Keep your driver current — the installer verifies the torch runtime and will stop with diagnostics instead of silently leaving you on the wrong backend.
 - **macOS:** Apple Silicon (M1+). CorridorKey inference runs natively via MLX (1.5–2x faster than MPS). GPU-intensive alpha generators (SAM2, GVM, VideoMaMa, MatAnyone2) run on MPS but are significantly slower — importing pre-made alpha mattes is recommended on Mac.
 
+### 🔴 AMD Radeon GPU Setup (Crucial) by toowyred for the AMD/Portability patch
+If you are using an AMD GPU (e.g., RX 7900 XTX), the standard installer defaults to CPU-only mode. To enable hardware acceleration, run these commands in your terminal (inside EZ-CorridorKey folder) after the initial install:
+
+1. **Activate the environment:**
+   `python -m venv .venv`
+   `".venv\Scripts\activate"`
+
+3. **Install AMD-specific AI libraries:**
+   `python -m pip install torch-directml torchvision numpy PySide6 timm transformers`
+
+4. **Launch:** Use `2-start.bat` to bypass CUDA checks.
+   
+5. **Note on GPU Warnings:** Even after these steps, the "Startup Diagnostics" window may still show a "GPU Required" error. This is because the app is specifically checking for NVIDIA CUDA. As long as you have installed `torch-directml` and are using the edited `2-start.bat`, the application will use your AMD card for supported tasks or fallback to your CPU. Check the terminal window for the `[INFO] Launching with DirectML (AMD/Radeon) compatibility...` message to confirm.
+
 **What the installer does:**
 
 - Checks for [Visual Studio Build Tools](https://visualstudio.microsoft.com/visual-cpp-build-tools/) (C++ compiler needed by OpenEXR) — offers to auto-install if missing
