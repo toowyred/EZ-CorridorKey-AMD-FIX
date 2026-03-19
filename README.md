@@ -1,4 +1,4 @@
-# EZ-CorridorKey **v1.8.0**
+# EZ-CorridorKey **v1.8.0** AMD-FIX by toowyred
 
 > **Latest release: [v1.8.0](https://github.com/edenaion/EZ-CorridorKey/releases/tag/v1.8.0)** — A/B wipe comparison, F-key view hotkeys, Docker browser mode, model resolution control. See the [full changelog](CHANGELOG.md).
 
